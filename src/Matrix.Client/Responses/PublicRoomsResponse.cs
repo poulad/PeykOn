@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Matrix.Client.Responses
 {
-    public class PublicRoomsResponse
+    public class PublicRoomsResponse : IResponse
     {
         [JsonProperty(Required = Required.Always)]
         public PublicRoomsChunk[] Chunk { get; set; }

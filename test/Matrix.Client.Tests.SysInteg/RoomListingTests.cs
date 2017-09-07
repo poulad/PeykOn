@@ -4,13 +4,15 @@ using Xunit;
 
 namespace Matrix.Client.Tests.SysInteg
 {
-    [Collection(CommonConstants.TestCollections.ListingRooms)]
+    [Collection(CommonConstants.TestCollections.RoomListing)]
     [TestCaseOrderer(CommonConstants.TestCaseOrdererName, CommonConstants.AssemblyName)]
-    public class ListingRoomsTests
+    public class RoomListingTests
     {
         private readonly TestsFixture _fixture;
 
-        public ListingRoomsTests(TestsFixture fixture)
+        private IMatrixClient Client => _fixture.MatrixClient;
+
+        public RoomListingTests(TestsFixture fixture)
         {
             _fixture = fixture;
         }
@@ -20,8 +22,7 @@ namespace Matrix.Client.Tests.SysInteg
         [Trait(CommonConstants.ApiRouteTraitName, CommonConstants.ApiRoutes.PublicRooms)]
         public async Task Should_Get_Public_Rooms()
         {
-            IMatrixClient sut = new MatrixClient();
-            var response = await sut.GetPublicRoomsAsync();
+            var response = await Client.GetPublicRoomsAsync();
 
             Assert.NotNull(response);
             Assert.True(response.Chunk.Length > 1);

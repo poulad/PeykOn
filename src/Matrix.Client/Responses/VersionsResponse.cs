@@ -2,7 +2,7 @@
 
 namespace Matrix.Client.Responses
 {
-    public class VersionsResponse
+    public class VersionsResponse : IResponse
     {
         [JsonProperty(Required = Required.Always)]
         public string[] Versions { get; set; }

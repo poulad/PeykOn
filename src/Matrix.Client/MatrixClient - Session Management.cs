@@ -8,9 +8,10 @@ namespace Matrix.Client
     public partial class MatrixClient
     {
         public Task<Login> LoginAsync(LoginRequest request) =>
-            MakeRequestAsync<Login>("r0/login", HttpMethod.Post, data: request);
+            MakeRequestAsync(request);
 
         public Task LogoutAsync() =>
-            MakeRequestAsync<object>("r0/logout", HttpMethod.Post, true);
+            MakeRequestAsync(new ParameterlessRequest<EmptyResponse>(
+                "client/{version}/logout?access_token={accessToken}", HttpMethod.Post, true));
     }
 }

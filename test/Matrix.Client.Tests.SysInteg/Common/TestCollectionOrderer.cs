@@ -9,8 +9,13 @@ namespace Matrix.Client.Tests.SysInteg.Common
     public class TestCollectionOrderer : ITestCollectionOrderer
     {
         private readonly string[] _orderedCollections = {
-            CommonConstants.TestCollections.SessionManagement,
-            CommonConstants.TestCollections.ListingRooms,
+            CommonConstants.TestCollections.ApiStandards,
+            CommonConstants.TestCollections.InitialSessionManagement,
+            CommonConstants.TestCollections.RoomListing,
+            CommonConstants.TestCollections.ContentRepository,
+            CommonConstants.TestCollections.EventSending,
+
+            CommonConstants.TestCollections.FinalSessionManagement
         };
 
         public IEnumerable<ITestCollection> OrderTestCollections(IEnumerable<ITestCollection> testCollections)

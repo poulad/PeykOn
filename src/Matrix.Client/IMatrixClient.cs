@@ -17,5 +17,9 @@ namespace Matrix.Client
         Task<PublicRoomsResponse> GetPublicRoomsAsync();
 
         Task LogoutAsync();
+
+        Task<string> SendMessageEventAsync(MessageEventRequestBase messageEventRequest);
+
+        Task<string> UploadMediaAsync(MediaUploadRequest request);
     }
 }

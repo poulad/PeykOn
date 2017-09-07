@@ -21,6 +21,7 @@ namespace Matrix.Client.Tests.SysInteg.Common
             {
                 UserName = configuration[nameof(TestConfigurations.UserName)],
                 Password = configuration[nameof(TestConfigurations.Password)],
+                RoomId = configuration[nameof(TestConfigurations.RoomId)],
             };
 
             if (string.IsNullOrWhiteSpace(TestConfigurations.UserName))

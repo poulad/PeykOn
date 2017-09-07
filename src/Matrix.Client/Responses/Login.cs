@@ -3,7 +3,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Matrix.Client.Responses
 {
-    public class Login
+    public class Login : IResponse
     {
         [JsonProperty(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
         public string AccessToken { get; set; }

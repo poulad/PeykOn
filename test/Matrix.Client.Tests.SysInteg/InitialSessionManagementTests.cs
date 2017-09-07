@@ -7,13 +7,15 @@ using Xunit;
 
 namespace Matrix.Client.Tests.SysInteg
 {
-    [Collection(CommonConstants.TestCollections.SessionManagement)]
+    [Collection(CommonConstants.TestCollections.InitialSessionManagement)]
     [TestCaseOrderer(CommonConstants.TestCaseOrdererName, CommonConstants.AssemblyName)]
-    public class SessionManagementTests
+    public class InitialSessionManagementTests
     {
         private readonly TestsFixture _fixture;
 
-        public SessionManagementTests(TestsFixture fixture)
+        private IMatrixClient Client => _fixture.MatrixClient;
+
+        public InitialSessionManagementTests(TestsFixture fixture)
         {
             _fixture = fixture;
         }
@@ -28,17 +30,15 @@ namespace Matrix.Client.Tests.SysInteg
                 ConfigurationProvider.TestConfigurations.Password
             );
 
-            IMatrixClient sut = new MatrixClient();
-            var login = await sut.LoginAsync(req);
+            var login = await Client.LoginAsync(req);
 
             Assert.NotEmpty(login.AccessToken);
 
-            _fixture.Login = login;
+            Client.AccessToken = login.AccessToken;
         }
 
         [Fact]
         [ExecutionOrder(2)]
-        [Trait(CommonConstants.ApiRouteTraitName, CommonConstants.ApiRoutes.Login)]
         public void Should_Deserialize_LoginRequest()
         {
             const string json = @"{
@@ -50,7 +50,7 @@ namespace Matrix.Client.Tests.SysInteg
 
             Assert.NotEmpty(loginRequest.User);
             Assert.NotEmpty(loginRequest.Password);
-            Assert.Equal(loginRequest.Type, LoginType.Password);
+            Assert.Equal(loginRequest.Type, LoginTypes.Password);
         }
     }
 }
