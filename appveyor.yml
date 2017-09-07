@@ -1,0 +1,8 @@
+image: Visual Studio 2017
+configuration: Release
+before_build:
+- dotnet restore
+build:
+  project: Matrix.sln
+  verbosity: normal
+test: off
