@@ -1,4 +1,5 @@
-﻿using Matrix.Client.Types;
+﻿using System.ComponentModel.DataAnnotations;
+using Matrix.Client.Types;
 using Newtonsoft.Json;
 
 // ReSharper disable once CheckNamespace
@@ -10,6 +11,7 @@ namespace Matrix.Client.Requests
         [JsonProperty("msgtype", Required = Required.Always)]
         public override string MsgType => MessageEventTypes.Text;
 
+        [Required]
         [JsonProperty(Required = Required.Always)]
         public sealed override string Body { get; set; }
 

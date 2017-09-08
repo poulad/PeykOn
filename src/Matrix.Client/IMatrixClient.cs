@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Matrix.Client.Requests;
 using Matrix.Client.Responses;
 
@@ -9,6 +11,11 @@ namespace Matrix.Client
         string HomeserverUrl { get; }
 
         string AccessToken { get; set; }
+
+        bool ShouldValidateRequests { get; set; }
+
+        (bool IsValid, IEnumerable<ValidationResult> ValidationResults) TryValidateRquest<TResponse>(IRequest<TResponse> request)
+            where TResponse : IResponse, new();
 
         Task<TResponse> MakeRequestAsync<TResponse>(IRequest<TResponse> request)
             where TResponse : IResponse, new();

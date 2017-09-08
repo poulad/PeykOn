@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Matrix.Client.Requests;
 using Matrix.Client.Responses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace Matrix.Client
 {
@@ -13,6 +15,8 @@ namespace Matrix.Client
         public string HomeserverUrl { get; }
 
         public string AccessToken { get; set; }
+
+        public bool ShouldValidateRequests { get; set; }
 
         private readonly JsonSerializerSettings _jsonSerializerSettings;
 
@@ -41,9 +45,23 @@ namespace Matrix.Client
             };
         }
 
+        public (bool IsValid, IEnumerable<ValidationResult> ValidationResults) TryValidateRquest<TResponse>(
+            IRequest<TResponse> request) where TResponse : IResponse, new()
+        {
+            var vc = new ValidationContext(request);
+            var vResults = new List<ValidationResult>();
+            bool isValid = Validator.TryValidateObject(request, vc, vResults);
+            return (isValid, vResults);
+        }
+
         public Task<TResponse> MakeRequestAsync<TResponse>(IRequest<TResponse> request)
             where TResponse : IResponse, new()
         {
+            if (ShouldValidateRequests && !TryValidateRquest(request).IsValid)
+            {
+                throw new ValidationException("Request is not valid");
+            }
+
             string uri = request.RelativePath.Replace("{version}", _apiVersion);
             if (request.RequiresAuthToken)
             {

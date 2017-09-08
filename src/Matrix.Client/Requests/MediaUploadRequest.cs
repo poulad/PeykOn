@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Matrix.Client.Responses;
@@ -8,6 +9,7 @@ namespace Matrix.Client.Requests
 {
     public class MediaUploadRequest : RequestBase<UploadMediaResponse>
     {
+        [Required]
         public string FileName
         {
             get => _fileName;
@@ -18,11 +20,12 @@ namespace Matrix.Client.Requests
             }
         }
 
-        public string FilePath { get; }
-
+        [Required]
         public string ContentType;
 
         private string _fileName;
+
+        private readonly string _filePath;
 
         private readonly Stream _fileStream;
 
@@ -44,16 +47,16 @@ namespace Matrix.Client.Requests
             FileName = fileName;
             ContentType = contentType;
             _fileStream = fileStream;
-            FilePath = filePath;
+            _filePath = filePath;
         }
 
         public override HttpContent GetHttpContent(JsonSerializerSettings serializerSettings)
         {
             HttpContent content;
 
-            if (!string.IsNullOrWhiteSpace(FilePath))
+            if (!string.IsNullOrWhiteSpace(_filePath))
             {
-                var bytes = File.ReadAllBytes(FilePath);
+                var bytes = File.ReadAllBytes(_filePath);
                 content = new ByteArrayContent(bytes);
             }
             else

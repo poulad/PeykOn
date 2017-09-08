@@ -5,7 +5,7 @@ namespace Matrix.Client.Tests.SysInteg.Common
 {
     public class TestsFixture : IDisposable
     {
-        public readonly IMatrixClient MatrixClient = new MatrixClient();
+        public readonly IMatrixClient MatrixClient = new MatrixClient { ShouldValidateRequests = true };
 
         public TestsFixture()
         {
