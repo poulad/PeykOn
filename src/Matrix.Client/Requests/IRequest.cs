@@ -2,6 +2,7 @@
 using Matrix.Client.Responses;
 using Newtonsoft.Json;
 
+// ReSharper disable once UnusedTypeParameter
 namespace Matrix.Client.Requests
 {
     public interface IRequest<TResponse>

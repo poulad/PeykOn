@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
+    <Product>Matrix .NET Client</Product>
+    <Title>Matrix .NET Client</Title>
+    <Authors>Poulad Ashraf pour</Authors>
+    <IncludeSource>True</IncludeSource>
+    <Version>0.0.1-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>

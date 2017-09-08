@@ -17,5 +17,8 @@ namespace Matrix.Client.Responses
 
         [JsonProperty(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
         public int? TotalRoomCountEstimate { get; set; }
+
+        [JsonProperty(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
+        public string NewRooms { get; set; } // ToDo: https://github.com/matrix-org/synapse/issues/2445
     }
 }

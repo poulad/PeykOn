@@ -22,21 +22,17 @@ namespace Matrix.Client
 
         public MatrixClient()
             : this("https://www.matrix.org")
-        {
-
-        }
+        { }
 
         public MatrixClient(string homeserverUrl)
             : this(homeserverUrl, "r0")
-        {
-
-        }
+        { }
 
         public MatrixClient(string homeserverUrl, string apiVersion)
         {
             _apiVersion = apiVersion;
-            HomeserverUrl = $"{homeserverUrl}/_matrix/";
-            _httpClient = new HttpClient { BaseAddress = new Uri(HomeserverUrl) };
+            HomeserverUrl = homeserverUrl;
+            _httpClient = new HttpClient { BaseAddress = new Uri($"{homeserverUrl}/_matrix/") };
 
             _jsonSerializerSettings = new JsonSerializerSettings
             {
@@ -45,7 +41,7 @@ namespace Matrix.Client
             };
         }
 
-        private Task<TResponse> MakeRequestAsync<TResponse>(IRequest<TResponse> request)
+        public Task<TResponse> MakeRequestAsync<TResponse>(IRequest<TResponse> request)
             where TResponse : IResponse, new()
         {
             string uri = request.RelativePath.Replace("{version}", _apiVersion);
@@ -57,12 +53,10 @@ namespace Matrix.Client
                 uri = uri.Replace("{accessToken}", AccessToken);
             }
 
-            var requestMessage = new HttpRequestMessage(request.Method, uri);
-
-            //if (request.RequiresSerialization)
+            var requestMessage = new HttpRequestMessage(request.Method, uri)
             {
-                requestMessage.Content = request.GetHttpContent(_jsonSerializerSettings);
-            }
+                Content = request.GetHttpContent(_jsonSerializerSettings)
+            };
 
             return _httpClient
                 .SendAsync(requestMessage)

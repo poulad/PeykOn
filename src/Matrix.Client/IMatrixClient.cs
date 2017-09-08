@@ -10,16 +10,44 @@ namespace Matrix.Client
 
         string AccessToken { get; set; }
 
+        Task<TResponse> MakeRequestAsync<TResponse>(IRequest<TResponse> request)
+            where TResponse : IResponse, new();
+
+        #region 2. API Standards
+
         Task<string[]> GetVersionsAsync();
+
+        #endregion
+
+        #region 3. Client Authentication
 
         Task<Login> LoginAsync(LoginRequest request);
 
-        Task<PublicRoomsResponse> GetPublicRoomsAsync();
-
         Task LogoutAsync();
+
+        #endregion
+
+        #region 6. Events
 
         Task<string> SendMessageEventAsync(MessageEventRequestBase messageEventRequest);
 
+        #endregion
+
+        #region 7. Rooms
+
+        Task<PublicRoomsResponse> GetPublicRoomsAsync();
+
+        #endregion
+
+        #region 11. Modules
+
+        #region 11.7 Content Repository
+
         Task<string> UploadMediaAsync(MediaUploadRequest request);
+
+
+        #endregion
+
+        #endregion
     }
 }
