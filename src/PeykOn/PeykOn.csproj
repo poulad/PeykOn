@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Matrix.NET.Abstractions\Matrix.NET.Abstractions.csproj" />
     <ProjectReference Include="..\Matrix.NET.Models\Matrix.NET.Models.csproj" />
   </ItemGroup>
 

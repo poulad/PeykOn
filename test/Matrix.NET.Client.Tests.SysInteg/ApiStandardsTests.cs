@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Matrix.NET.Abstractions;
 using Matrix.NET.Client.Tests.SysInteg.Common;
 using Xunit;
 
@@ -20,7 +21,7 @@ namespace Matrix.NET.Client.Tests.SysInteg
 
         [Fact]
         [ExecutionOrder(1)]
-        [Trait(CommonConstants.ApiRouteTraitName, CommonConstants.ApiRoutes.Versions)]
+        [Trait(CommonConstants.ApiRouteTraitName, Constants.Routes.ApiStandards.Versions)]
         public async Task Should_Get_Versions()
         {
             var versions = await Client.GetVersionsAsync();

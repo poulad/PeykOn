@@ -1,7 +1,6 @@
-﻿using Matrix.NET.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Matrix.NET.Client.Responses
+namespace Matrix.NET.Models.Responses
 {
     public class VersionsResponse : IResponse
     {

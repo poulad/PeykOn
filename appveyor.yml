@@ -3,6 +3,6 @@ configuration: Release
 before_build:
 - dotnet restore
 build:
-  project: Matrix.sln
+  project: Matrix.NET.sln
   verbosity: normal
 test: off

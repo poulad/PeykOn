@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Matrix.NET.Client.Requests;
-using Matrix.NET.Client.Responses;
+using Matrix.NET.Models.Responses;
 
 namespace Matrix.NET.Client
 {
