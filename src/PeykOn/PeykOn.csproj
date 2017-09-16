@@ -13,4 +13,8 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Matrix.NET.Models\Matrix.NET.Models.csproj" />
+  </ItemGroup>
+
 </Project>
