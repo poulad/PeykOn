@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Matrix.Client.Requests;
-using Matrix.Client.Responses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using Matrix.NET.Models;
 
 namespace Matrix.Client
 {
@@ -46,7 +46,8 @@ namespace Matrix.Client
         }
 
         public (bool IsValid, IEnumerable<ValidationResult> ValidationResults) TryValidateRquest<TResponse>(
-            IRequest<TResponse> request) where TResponse : IResponse, new()
+            IRequest<TResponse> request)
+            where TResponse : IResponse
         {
             var vc = new ValidationContext(request);
             var vResults = new List<ValidationResult>();
@@ -55,7 +56,7 @@ namespace Matrix.Client
         }
 
         public Task<TResponse> MakeRequestAsync<TResponse>(IRequest<TResponse> request)
-            where TResponse : IResponse, new()
+            where TResponse : IResponse
         {
             if (ShouldValidateRequests && !TryValidateRquest(request).IsValid)
             {
@@ -78,20 +79,51 @@ namespace Matrix.Client
 
             return _httpClient
                 .SendAsync(requestMessage)
-                .ContinueWith(EnsureSuccessResponse)
+                .ContinueWith(t => ReadResponse(t, true))
                 .ContinueWith(t => JsonConvert.DeserializeObject<TResponse>(t.Result.Result, _jsonSerializerSettings));
         }
 
-        private static Task<string> EnsureSuccessResponse(Task<HttpResponseMessage> t)
+        public Task<TResponse> MakeRequestAsync<TResponse>
+            (IRequest<TResponse> request, bool requiresSuccessStatusCode, params Type[] responseTypes)
+            where TResponse : class, IResponse
         {
-            if (t.Result.IsSuccessStatusCode)
+            if (ShouldValidateRequests && !TryValidateRquest(request).IsValid)
             {
-                return t.Result.Content.ReadAsStringAsync();
+                throw new ValidationException("Request is not valid");
             }
-            else
+
+            string uri = request.RelativePath.Replace("{version}", _apiVersion);
+            if (request.RequiresAuthToken)
             {
-                throw new NotImplementedException();
+                if (string.IsNullOrWhiteSpace(AccessToken))
+                    throw new NullReferenceException(nameof(AccessToken));
+
+                uri = uri.Replace("{accessToken}", AccessToken);
             }
+
+            var requestMessage = new HttpRequestMessage(request.Method, uri)
+            {
+                Content = request.GetHttpContent(_jsonSerializerSettings)
+            };
+
+            return _httpClient
+                .SendAsync(requestMessage)
+                .ContinueWith(t => ReadResponse(t, requiresSuccessStatusCode))
+                .ContinueWith(t => DeserializeJson<TResponse>(t.Result, responseTypes));
         }
+
+        private static Task<string> ReadResponse(Task<HttpResponseMessage> t, bool requiresSuccessStatusCode) =>
+            requiresSuccessStatusCode && !t.Result.IsSuccessStatusCode
+                ? throw new NotImplementedException()
+                : t.Result.Content.ReadAsStringAsync()
+            ;
+
+        private TBase DeserializeJson<TBase>(Task<string> jsonTask, params Type[] types)
+            where TBase : class
+            => (TBase)types
+                .Select(type => JsonConvert.DeserializeObject(jsonTask.Result, type, _jsonSerializerSettings))
+                .FirstOrDefault(o => o != null) ??
+               JsonConvert.DeserializeObject<TBase>(jsonTask.Result, _jsonSerializerSettings)
+            ;
     }
 }

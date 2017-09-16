@@ -1,12 +1,11 @@
 ﻿using System.Net.Http;
-using Matrix.Client.Responses;
 using Newtonsoft.Json;
 
 // ReSharper disable once UnusedTypeParameter
-namespace Matrix.Client.Requests
+namespace Matrix.NET.Models
 {
     public interface IRequest<TResponse>
-        where TResponse : IResponse, new()
+        where TResponse : IResponse
     {
         HttpMethod Method { get; }
 

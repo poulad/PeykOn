@@ -1,5 +1,5 @@
 ﻿using System.Net.Http;
-using Matrix.Client.Responses;
+using Matrix.NET.Models;
 using Newtonsoft.Json;
 
 namespace Matrix.Client.Requests

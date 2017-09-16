@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Matrix.NET.Models;
+using Newtonsoft.Json;
 
 namespace Matrix.Client.Responses
 {

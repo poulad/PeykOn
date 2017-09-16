@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using Matrix.Client.Responses;
+using Matrix.NET.Models;
 
 // ReSharper disable once CheckNamespace
 namespace Matrix.Client.Requests

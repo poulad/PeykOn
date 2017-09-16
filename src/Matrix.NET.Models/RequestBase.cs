@@ -2,13 +2,12 @@
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using Matrix.Client.Responses;
 using Newtonsoft.Json;
 
-namespace Matrix.Client.Requests
+namespace Matrix.NET.Models
 {
     public abstract class RequestBase<TResponse> : IRequest<TResponse>
-        where TResponse : IResponse, new()
+        where TResponse : IResponse
     {
         public HttpMethod Method { get; }
 

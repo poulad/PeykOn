@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 using Matrix.Client.Responses;
-using Matrix.Client.Types;
+using Matrix.NET.Models;
 using Newtonsoft.Json;
 
 namespace Matrix.Client.Requests
@@ -17,7 +17,7 @@ namespace Matrix.Client.Requests
 
         [Required]
         [JsonProperty(Required = Required.Always)]
-        public string Type { get; set; }
+        public AuthenticationType Type { get; set; }
 
         public string User { get; set; }
 
@@ -30,7 +30,7 @@ namespace Matrix.Client.Requests
         {
             User = user;
             Password = password;
-            Type = LoginTypes.Password;
+            Type = AuthenticationType.PasswordBased;
         }
     }
 }

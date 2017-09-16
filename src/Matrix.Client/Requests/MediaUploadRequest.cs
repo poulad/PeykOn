@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Matrix.Client.Responses;
+using Matrix.NET.Models;
 using Newtonsoft.Json;
 
 namespace Matrix.Client.Requests

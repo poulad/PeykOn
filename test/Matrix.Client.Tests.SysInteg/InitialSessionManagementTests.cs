@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Matrix.Client.Requests;
 using Matrix.Client.Tests.SysInteg.Common;
-using Matrix.Client.Types;
+using Matrix.NET.Models;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -50,7 +50,7 @@ namespace Matrix.Client.Tests.SysInteg
 
             Assert.NotEmpty(loginRequest.User);
             Assert.NotEmpty(loginRequest.Password);
-            Assert.Equal(loginRequest.Type, LoginTypes.Password);
+            Assert.Equal(loginRequest.Type, AuthenticationType.PasswordBased);
         }
     }
 }

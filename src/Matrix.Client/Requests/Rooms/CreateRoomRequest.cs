@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using Matrix.Client.Responses;
+using Matrix.NET.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 

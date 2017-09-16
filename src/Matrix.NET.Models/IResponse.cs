@@ -1,4 +1,4 @@
-﻿namespace Matrix.Client.Responses
+﻿namespace Matrix.NET.Models
 {
     public interface IResponse
     {

@@ -1,4 +1,5 @@
 ﻿using Matrix.Client.Types;
+using Matrix.NET.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
