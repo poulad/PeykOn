@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Matrix.NET.Abstractions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Matrix.NET.Models.Responses

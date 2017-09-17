@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Matrix.NET.Abstractions\Matrix.NET.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\Matrix.NET.Client\Matrix.NET.Client.csproj" />
   </ItemGroup>
 

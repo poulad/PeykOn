@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using Matrix.NET.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -7,6 +8,8 @@ namespace Matrix.NET.Models
     [JsonConverter(typeof(StringEnumConverter))]
     public enum AuthenticationType
     {
+        None,
+
         /// <summary>
         /// The client submits a username and secret password, both sent in plain-text.
         /// </summary>

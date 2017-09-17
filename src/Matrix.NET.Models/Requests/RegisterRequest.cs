@@ -6,7 +6,8 @@ using Newtonsoft.Json.Serialization;
 
 namespace Matrix.NET.Models.Requests
 {
-    public class RegisterRequest : RequestBase<UserInteractiveAuthResponseBase>
+    public class RegisterRequest<TAuth> : RequestBase<UserInteractiveAuthResponseBase>
+        where TAuth : AuthenticationDataBase
     {
         /// <summary>
         /// The kind of account to register. Defaults to user. One of: ["guest", "user"]
@@ -23,7 +24,7 @@ namespace Matrix.NET.Models.Requests
         /// is instead used to authenticate the register call itself.It should be left empty, or omitted,
         /// unless an earlier call returned an response with status code 401.
         /// </summary>
-        public AuthenticationDataBase Auth { get; set; }
+        public TAuth Auth { get; set; }
 
         /// <summary>
         /// If true, the server binds the email used for authentication to the Matrix ID with the ID Server.
