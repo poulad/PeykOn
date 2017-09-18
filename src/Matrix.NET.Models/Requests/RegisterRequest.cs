@@ -16,7 +16,17 @@ namespace Matrix.NET.Models.Requests
         /// Query parameter
         /// </remarks>
         [JsonIgnore]
-        public UserAccountKind Kind { get; } = UserAccountKind.User;
+        public UserAccountKind Kind
+        {
+            get => _kind;
+            set
+            {
+                if (value == _kind) return;
+
+                _kind = value;
+                PathParameters["kind"] = JsonConvert.SerializeObject(Kind, new StringEnumConverter(true));
+            }
+        }
 
         /// <summary>
         /// Additional authentication information for the user-interactive authentication API. Note that
@@ -57,6 +67,8 @@ namespace Matrix.NET.Models.Requests
         [JsonProperty(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
         public string InitialDeviceDisplayName { get; set; }
 
+        private UserAccountKind _kind = UserAccountKind.User;
+
         public RegisterRequest()
             : base("client/{version}/register", HttpMethod.Post, false)
         {
@@ -66,7 +78,6 @@ namespace Matrix.NET.Models.Requests
             : base("client/{version}/register?kind={kind}", HttpMethod.Post, false)
         {
             Kind = accountKind;
-            PathParameters.Add("kind", JsonConvert.SerializeObject(Kind, new StringEnumConverter(true)));
         }
     }
 }

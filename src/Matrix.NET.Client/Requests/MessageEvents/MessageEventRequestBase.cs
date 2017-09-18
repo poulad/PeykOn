@@ -1,12 +1,14 @@
 ﻿using System.Net.Http;
 using Matrix.NET.Client.Responses;
 using Matrix.NET.Models;
+using Newtonsoft.Json;
 
 // ReSharper disable once CheckNamespace
 namespace Matrix.NET.Client.Requests
 {
     public abstract class MessageEventRequestBase : RequestBase<SendEventResponse>
     {
+        [JsonIgnore]
         public string RoomId
         {
             get => _roomId;
@@ -17,6 +19,7 @@ namespace Matrix.NET.Client.Requests
             }
         }
 
+        [JsonIgnore]
         public string TxnId
         {
             get => _txnId;
@@ -36,7 +39,8 @@ namespace Matrix.NET.Client.Requests
         private string _txnId;
 
         protected MessageEventRequestBase()
-            : base("client/{version}/rooms/{roomId}/send/{eventType}/{txnId}?access_token={accessToken}", HttpMethod.Put, true)
+            : base("client/{version}/rooms/{roomId}/send/{eventType}/{txnId}?access_token={accessToken}",
+                HttpMethod.Put, true)
         {
             PathParameters.Add("eventType", "m.room.message");
         }

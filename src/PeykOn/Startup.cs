@@ -5,20 +5,23 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using PeykOn.Data;
+using PeykOn.Services;
 
 namespace PeykOn
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedRedisCache(options => { options.Configuration = "localhost"; });
+
             services.AddMvc()
                 .AddJsonOptions(options =>
                 {
@@ -26,10 +29,12 @@ namespace PeykOn
                 });
 
             services.AddDbContext<PeykOnDbContext>(options => options
-                    .UseNpgsql(Configuration["ConnectionString"], builder => builder
-                        .MigrationsAssembly(typeof(Startup).Assembly.FullName)
-                        .MigrationsHistoryTable("ef_migrations_history")
-            ));
+                .UseNpgsql(_configuration["ConnectionString"], builder => builder
+                    .MigrationsAssembly(typeof(Startup).Assembly.FullName)
+                    .MigrationsHistoryTable("ef_migrations_history")
+                ));
+
+            services.AddScoped<IRegistrationService, RegistrationService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

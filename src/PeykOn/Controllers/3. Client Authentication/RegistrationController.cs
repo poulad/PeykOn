@@ -1,10 +1,10 @@
-﻿using System;
+﻿using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Matrix.NET.Models;
 using Matrix.NET.Models.Requests;
 using Matrix.NET.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
-using PeykOn.Data;
-using static PeykOn.Helpers.Helpers;
+using PeykOn.Services;
 using Constants = Matrix.NET.Abstractions.Constants;
 
 // ReSharper disable once CheckNamespace
@@ -13,57 +13,65 @@ namespace PeykOn.Controllers
     [Route(Constants.Routes.ClientAuthentication.Registration)]
     public class RegistrationController : Controller
     {
-        private readonly PeykOnDbContext _dbContext;
+        private readonly IRegistrationService _regService;
 
-        public RegistrationController(PeykOnDbContext dbContext)
+        public RegistrationController(IRegistrationService regService)
         {
-            _dbContext = dbContext;
+            _regService = regService;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        /// <!--
+        ///  if sessionKey exists in cache AND account kind is the same as in cache
+        ///      process with flows/stages
+        ///  else
+        ///      generate a new session
+        /// -->
         [HttpPost]
-        public IActionResult Index(
+        public async Task<IActionResult> Index(
             [FromBody] RegisterRequest<AuthenticationData> request,
             [FromQuery] UserAccountKind kind = UserAccountKind.User
-            )
+        )
         {
-            UserInteractiveAuthResponseBase response;
-
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            if (request.Auth?.Type == AuthenticationType.Dummy &&
-                Guid.TryParse(request.Auth?.Session, out var guid))
+            request.Kind = kind;
+            UserInteractiveAuthResponseBase authResponse;
+
+            // ToDo if kind is guest, allow access
+            if (request.Kind == UserAccountKind.Guest || request.Auth?.Type == AuthenticationType.Dummy)
             {
-                response = new RegisterResponse
-                {
-                    UserId = $"@{GenerateAlphanumericString(20).ToLower()}:peykon.ga",
-                    AccessToken = Guid.NewGuid().ToString(),
-                    HomeServer = "peykon.ga",
-                    DeviceId = GenerateAlphanumericString(10),
-                };
+                authResponse = await _regService.CreateAccountAsync(request);
+                return StatusCode((int) authResponse.StatusCode, authResponse);
+            }
+
+
+            if (request.Auth?.Session == null ||
+                !Regex.IsMatch(request.Auth.Session, @"^(?:[a-z][A-Z]\d){64}$"))
+            {
+                authResponse = await _regService.GenerateSessionAsync(request);
+                return StatusCode((int) authResponse.StatusCode, authResponse);
+            }
+
+            var cacheData = await _regService.GetCacheDataAsync(request.Auth.Session);
+            if (cacheData?.Request.Kind == request.Kind)
+            {
+                authResponse = await _regService.CreateAccountAsync(request);
             }
             else
             {
-                response = new UserInteractiveAuthResponse
-                {
-                    Session = Guid.NewGuid().ToString(),
-                    Flows = new[]
-                    {
-                        new UserInteractiveAuthFlow
-                        {
-                            Stages = new []
-                            {
-                                Constants.Authentication.Types.Dummy,
-                            }
-                        }
-                    }
-                };
-
+                authResponse = await _regService.GenerateSessionAsync(request);
             }
 
-            return Json(response);
+            return StatusCode((int) authResponse.StatusCode, authResponse);
         }
     }
 }

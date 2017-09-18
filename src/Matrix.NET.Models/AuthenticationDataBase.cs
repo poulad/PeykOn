@@ -15,6 +15,7 @@ namespace Matrix.NET.Models
         /// <summary>
         /// The value of the session key given by the homeserver.
         /// </summary>
+        [MinLength(1)]
         public string Session { get; set; }
     }
 
@@ -31,7 +32,6 @@ namespace Matrix.NET.Models
 
     public class DummyAuthenticationData : AuthenticationDataBase
     {
-
     }
 
     public class PasswordBasedAuthenticationData : AuthenticationDataBase

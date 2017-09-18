@@ -1,11 +1,15 @@
-﻿using Matrix.NET.Abstractions;
+﻿using System.Net;
+using Matrix.NET.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Matrix.NET.Models.Responses
 {
-    public abstract class UserInteractiveAuthResponseBase : IResponse
+    public abstract class UserInteractiveAuthResponseBase : ResponseBase, IErrorResponse
     {
+        public string ErrCode { get; set; }
+
+        public string Error { get; set; }
     }
 
     /// <summary>
@@ -39,6 +43,11 @@ namespace Matrix.NET.Models.Responses
 
     public class UserInteractiveAuthResponse : UserInteractiveAuthResponseBase
     {
+        public UserInteractiveAuthResponse()
+        {
+            StatusCode = HttpStatusCode.Unauthorized;
+        }
+        
         public string Session { get; set; }
 
         public UserInteractiveAuthParameters Params { get; set; }

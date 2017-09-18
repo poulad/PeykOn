@@ -9,15 +9,18 @@ namespace Matrix.NET.Models
     public abstract class RequestBase<TResponse> : IRequest<TResponse>
         where TResponse : IResponse
     {
+        [JsonIgnore]
         public HttpMethod Method { get; }
 
+        [JsonIgnore]
         public string RelativePath =>
             PathParameters.Aggregate(_parameterizedPath,
                 (current, pair) => current.Replace($"{{{pair.Key}}}", pair.Value));
 
+        [JsonIgnore]
         public bool RequiresAuthToken { get; }
 
-        protected internal readonly Dictionary<string, string> PathParameters = new Dictionary<string, string>(5);
+        protected readonly Dictionary<string, string> PathParameters = new Dictionary<string, string>(5);
 
         private readonly string _parameterizedPath;
 
