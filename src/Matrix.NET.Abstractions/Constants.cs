@@ -6,9 +6,11 @@
 
         public static class Routes
         {
-            public const string BaseClientRoute = "_matrix/client";
+            private const string BaseClientRoute = "_matrix/client";
 
-            public const string BaseVersionedClientRoute = "_matrix/client/" + MajorVersion;
+            private const string BaseVersionedClientRoute = "_matrix/client/" + MajorVersion;
+            
+            private const string BaseVersionedMediaRoute = "_matrix/media/" + MajorVersion;
 
             public static class ApiStandards
             {
@@ -18,19 +20,36 @@
             public static class ClientAuthentication
             {
                 public const string Registration = BaseVersionedClientRoute + "/register";
+
+                public const string Login = BaseVersionedClientRoute + "/login";
+
+                public const string Logout = BaseVersionedClientRoute + "/logout";
             }
 
-            // todo
+            public static class Events
+            {
+                private const string RoomsRoute = BaseVersionedClientRoute + "/rooms/{roomId}";
+                
+                public const string State = RoomsRoute + "/state";
+                
+                public const string EventType = State + "/{eventType}";
+                
+                public const string StateKey = EventType + "/{stateKey}";
+                
+                public const string TxnId = EventType + "/{txnId}";
+            }
+            
+            public static class Rooms
+            {
+                public const string CreateRoom = BaseVersionedClientRoute + "/createRoom";
+                
+                public const string PublicRooms = BaseVersionedClientRoute + "/publicRooms";
+            }
 
-            public const string Login = "/_matrix/client/r0/login";
-
-            public const string Logout = "/_matrix/client/r0/logout";
-
-            public const string PublicRooms = "/_matrix/client/r0/publicRooms";
-
-            public const string SendEvent = "/_matrix/client/r0/rooms/{roomId}/send/{eventType}/{txnId}";
-
-            public const string UploadMedia = "/_matrix/media/r0/upload";
+            public static class ContentRepository
+            {
+                public const string Upload = BaseVersionedMediaRoute + "/upload";
+            }
         }
 
         public static class Authentication
@@ -48,6 +67,25 @@
                 public const string EmailBased = "m.login.email.identity";
 
                 public const string Dummy = "m.login.dummy";
+            }
+        }
+
+        public static class Room
+        {
+            public static class Visiblity
+            {
+                public const string Public = "public";
+
+                public const string Private = "private";
+            }
+
+            public static class Preset
+            {
+                public const string PrivateChat = "private_chat";
+
+                public const string TrustedPrivateChat = "trusted_private_chat";
+
+                public const string PublicChat = "public_chat";
             }
         }
     }

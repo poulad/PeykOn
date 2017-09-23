@@ -11,7 +11,7 @@ namespace Matrix.NET.Client.Tests.SysInteg.Common
         private readonly string[] _orderedCollections = {
             CommonConstants.TestCollections.ApiStandards,
             CommonConstants.TestCollections.InitialSessionManagement,
-            CommonConstants.TestCollections.RoomListing,
+            CommonConstants.TestCollections.Rooms,
             CommonConstants.TestCollections.ContentRepository,
             CommonConstants.TestCollections.EventSending,
 

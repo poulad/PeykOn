@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
-using Matrix.NET.Client.Responses;
-using Matrix.NET.Models;
+using Matrix.NET.Models.Responses;
 using Newtonsoft.Json;
 
-namespace Matrix.NET.Client.Requests
+namespace Matrix.NET.Models.Requests
 {
-    public sealed class LoginRequest : RequestBase<Login>
+    public sealed class LoginRequest : RequestBase<LoginResponse>
     {
         public string Address { get; set; }
 

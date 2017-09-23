@@ -18,7 +18,8 @@ namespace Matrix.NET.Client
 
         bool ShouldValidateRequests { get; set; }
 
-        (bool IsValid, IEnumerable<ValidationResult> ValidationResults) TryValidateRquest<TResponse>(IRequest<TResponse> request)
+        (bool IsValid, IEnumerable<ValidationResult> ValidationResults) TryValidateRquest<TResponse>(
+            IRequest<TResponse> request)
             where TResponse : IResponse;
 
         Task<TResponse> MakeRequestAsync<TResponse>(IRequest<TResponse> request)
@@ -53,7 +54,7 @@ namespace Matrix.NET.Client
         Task<UserInteractiveAuthResponseBase> RegisterAsync<TAuth>(RegisterRequest<TAuth> request)
             where TAuth : AuthenticationDataBase;
 
-        Task<Login> LoginAsync(LoginRequest request);
+        Task<LoginResponse> LoginAsync(LoginRequest request);
 
         Task LogoutAsync();
 
@@ -67,6 +68,10 @@ namespace Matrix.NET.Client
 
         #region 7. Rooms
 
+        Task<string> CreateRoomAsync();
+        
+        Task<string> CreateRoomAsync(CreateRoomRequest request);
+
         Task<PublicRoomsResponse> GetPublicRoomsAsync();
 
         #endregion
@@ -76,7 +81,6 @@ namespace Matrix.NET.Client
         #region 11.7 Content Repository
 
         Task<string> UploadMediaAsync(MediaUploadRequest request);
-
 
         #endregion
 

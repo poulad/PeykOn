@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
+using Matrix.NET.Abstractions;
 using Matrix.NET.Client.Requests;
 using Matrix.NET.Client.Tests.SysInteg.Common;
 using Matrix.NET.Models;
+using Matrix.NET.Models.Requests;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -22,7 +24,7 @@ namespace Matrix.NET.Client.Tests.SysInteg
 
         [Fact]
         [ExecutionOrder(1)]
-        [Trait(CommonConstants.ApiRouteTraitName, CommonConstants.ApiRoutes.Login)]
+        [Trait(CommonConstants.ApiRouteTraitName, Constants.Routes.ClientAuthentication.Login)]
         public async Task Should_Login_With_Password()
         {
             var req = new LoginRequest(

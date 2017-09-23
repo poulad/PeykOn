@@ -1,5 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
+using Matrix.NET.Abstractions;
 using Matrix.NET.Client.Requests;
 using Matrix.NET.Client.Tests.SysInteg.Common;
 using Xunit;
@@ -21,7 +22,7 @@ namespace Matrix.NET.Client.Tests.SysInteg
 
         [Fact]
         [ExecutionOrder(1.1)]
-        [Trait(CommonConstants.ApiRouteTraitName, CommonConstants.ApiRoutes.UploadMedia)]
+        [Trait(CommonConstants.ApiRouteTraitName, Constants.Routes.ContentRepository.Upload)]
         public async Task Should_Upload_File_via_Path()
         {
             var req = new MediaUploadRequest("img.png", "image/png", @"Files/matrix.png");
@@ -34,7 +35,7 @@ namespace Matrix.NET.Client.Tests.SysInteg
 
         [Fact]
         [ExecutionOrder(1.2)]
-        [Trait(CommonConstants.ApiRouteTraitName, CommonConstants.ApiRoutes.UploadMedia)]
+        [Trait(CommonConstants.ApiRouteTraitName, Constants.Routes.ContentRepository.Upload)]
         public async Task Should_Upload_File_via_Stream()
         {
             string contentUri;

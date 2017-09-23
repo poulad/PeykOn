@@ -53,7 +53,6 @@ namespace PeykOn.Controllers
                 return StatusCode((int) authResponse.StatusCode, authResponse);
             }
 
-
             if (request.Auth?.Session == null ||
                 !Regex.IsMatch(request.Auth.Session, @"^(?:[a-z][A-Z]\d){64}$"))
             {

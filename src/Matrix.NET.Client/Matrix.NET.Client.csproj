@@ -1,5 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
     <Product>Matrix .NET Client</Product>
@@ -8,15 +7,12 @@
     <IncludeSource>True</IncludeSource>
     <Version>0.0.1-alpha</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Matrix.NET.Models\Matrix.NET.Models.csproj" />
   </ItemGroup>
-
 </Project>

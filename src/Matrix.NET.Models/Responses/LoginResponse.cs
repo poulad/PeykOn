@@ -1,10 +1,9 @@
-﻿using Matrix.NET.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Matrix.NET.Client.Responses
+namespace Matrix.NET.Models.Responses
 {
-    public class Login : IResponse
+    public class LoginResponse : ResponseBase
     {
         [JsonProperty(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
         public string AccessToken { get; set; }

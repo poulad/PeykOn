@@ -1,5 +1,6 @@
 ﻿using System;
 using Matrix.NET.Client.Requests;
+using Matrix.NET.Models.Requests;
 
 namespace Matrix.NET.Client.Tests.SysInteg.Common
 {

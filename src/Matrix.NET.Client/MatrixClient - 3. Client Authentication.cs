@@ -1,7 +1,5 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Matrix.NET.Client.Requests;
-using Matrix.NET.Client.Responses;
 using Matrix.NET.Models;
 using Matrix.NET.Models.Requests;
 using Matrix.NET.Models.Responses;
@@ -10,7 +8,7 @@ namespace Matrix.NET.Client
 {
     public partial class MatrixClient
     {
-        public Task<Login> LoginAsync(LoginRequest request) =>
+        public Task<LoginResponse> LoginAsync(LoginRequest request) =>
             MakeRequestAsync(request);
 
         public Task LogoutAsync() =>

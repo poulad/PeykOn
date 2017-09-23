@@ -1,8 +1,7 @@
 ﻿using System.Net.Http;
-using Matrix.NET.Models;
 using Newtonsoft.Json;
 
-namespace Matrix.NET.Client.Requests
+namespace Matrix.NET.Models.Requests
 {
     public class ParameterlessRequest<TResponse> : RequestBase<TResponse>
         where TResponse : IResponse, new()

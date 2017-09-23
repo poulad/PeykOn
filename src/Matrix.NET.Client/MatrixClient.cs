@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Matrix.NET.Abstractions;
 using Matrix.NET.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -26,17 +27,14 @@ namespace Matrix.NET.Client
 
         public MatrixClient()
             : this("https://www.matrix.org")
-        { }
+        {
+        }
 
-        public MatrixClient(string homeserverUrl)
-            : this(homeserverUrl, "r0")
-        { }
-
-        public MatrixClient(string homeserverUrl, string apiVersion)
+        public MatrixClient(string homeserverUrl, string apiVersion = Constants.MajorVersion)
         {
             _apiVersion = apiVersion;
             HomeserverUrl = homeserverUrl;
-            _httpClient = new HttpClient { BaseAddress = new Uri($"{homeserverUrl}/_matrix/") };
+            _httpClient = new HttpClient {BaseAddress = new Uri($"{homeserverUrl}/_matrix/")};
 
             _jsonSerializerSettings = new JsonSerializerSettings
             {
@@ -83,9 +81,9 @@ namespace Matrix.NET.Client
                 .ContinueWith(t => JsonConvert.DeserializeObject<TResponse>(t.Result.Result, _jsonSerializerSettings));
         }
 
-        public Task<TResponse> MakeRequestAsync<TResponse>
-            (IRequest<TResponse> request, bool requiresSuccessStatusCode, params Type[] responseTypes)
-            where TResponse : class, IResponse
+        public Task<TResponseBase> MakeRequestAsync<TResponseBase>
+            (IRequest<TResponseBase> request, bool requiresSuccessStatusCode, params Type[] responseTypes)
+            where TResponseBase : class, IResponse
         {
             if (ShouldValidateRequests && !TryValidateRquest(request).IsValid)
             {
@@ -97,6 +95,8 @@ namespace Matrix.NET.Client
             {
                 if (string.IsNullOrWhiteSpace(AccessToken))
                     throw new NullReferenceException(nameof(AccessToken));
+                if (!uri.Contains("{accessToken}"))
+                    throw new ArgumentException("Request requires auth token but url parameter is not specified");
 
                 uri = uri.Replace("{accessToken}", AccessToken);
             }
@@ -109,21 +109,19 @@ namespace Matrix.NET.Client
             return _httpClient
                 .SendAsync(requestMessage)
                 .ContinueWith(t => ReadResponse(t, requiresSuccessStatusCode))
-                .ContinueWith(t => DeserializeJson<TResponse>(t.Result, responseTypes));
+                .ContinueWith(t => DeserializeJson<TResponseBase>(t.Result, responseTypes));
         }
 
         private static Task<string> ReadResponse(Task<HttpResponseMessage> t, bool requiresSuccessStatusCode) =>
             requiresSuccessStatusCode && !t.Result.IsSuccessStatusCode
-                ? throw new NotImplementedException()
-                : t.Result.Content.ReadAsStringAsync()
-            ;
+                ? throw new NotImplementedException(t.Result.Content.ReadAsStringAsync().Result)
+                : t.Result.Content.ReadAsStringAsync();
 
         private TBase DeserializeJson<TBase>(Task<string> jsonTask, params Type[] types)
             where TBase : class
-            => (TBase)types
-                .Select(type => JsonConvert.DeserializeObject(jsonTask.Result, type, _jsonSerializerSettings))
-                .FirstOrDefault(o => o != null) ??
-               JsonConvert.DeserializeObject<TBase>(jsonTask.Result, _jsonSerializerSettings)
-            ;
+            => (TBase) types
+                   .Select(type => JsonConvert.DeserializeObject(jsonTask.Result, type, _jsonSerializerSettings))
+                   .FirstOrDefault(o => o != null) ??
+               JsonConvert.DeserializeObject<TBase>(jsonTask.Result, _jsonSerializerSettings);
     }
 }
