@@ -1,9 +1,11 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Matrix.NET.Models;
 using Matrix.NET.Models.Requests;
 using Matrix.NET.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
+using PeykOn.Models.Caching;
 using PeykOn.Services;
 using Constants = Matrix.NET.Abstractions.Constants;
 
@@ -34,43 +36,48 @@ namespace PeykOn.Controllers
         /// -->
         [HttpPost]
         public async Task<IActionResult> Index(
-            [FromBody] RegisterRequest<AuthenticationData> request,
-            [FromQuery] UserAccountKind kind = UserAccountKind.User
-        )
+            [FromBody] RegisterRequest<AuthenticationData> request, [FromQuery] UserAccountKind? kind)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            request.Kind = kind;
+            request.Kind = kind ?? UserAccountKind.User;
             UserInteractiveAuthResponseBase authResponse;
 
-            // ToDo if kind is guest, allow access
-            if (request.Kind == UserAccountKind.Guest || request.Auth?.Type == AuthenticationType.Dummy)
+            if (request.Kind == UserAccountKind.Guest)
             {
-                authResponse = await _regService.CreateAccountAsync(request);
-                return StatusCode((int) authResponse.StatusCode, authResponse);
-            }
-
-            if (request.Auth?.Session == null ||
-                !Regex.IsMatch(request.Auth.Session, @"^(?:[a-z][A-Z]\d){64}$"))
-            {
-                authResponse = await _regService.GenerateSessionAsync(request);
-                return StatusCode((int) authResponse.StatusCode, authResponse);
-            }
-
-            var cacheData = await _regService.GetCacheDataAsync(request.Auth.Session);
-            if (cacheData?.Request.Kind == request.Kind)
-            {
-                authResponse = await _regService.CreateAccountAsync(request);
+                authResponse = await _regService.CreateGuestAccountAsync();
             }
             else
             {
-                authResponse = await _regService.GenerateSessionAsync(request);
+                if (request.Auth?.Session != null &&
+                    Regex.IsMatch(request.Auth.Session, @"^(?:[a-z]|\d){64}$", RegexOptions.IgnoreCase))
+                {
+                    var cacheData = await _regService.GetCacheDataAsync(request.Auth.Session);
+                    if (cacheData != null && HaveSameRegistrationInfo(cacheData, request))
+                    {
+                        // ToDo check whether all steps are completed
+                        authResponse = await _regService.CreateUserAccountAsync(request);
+                    }
+                    else
+                    {
+                        authResponse = await _regService.GenerateSessionAsync(request);
+                    }
+                }
+                else
+                {
+                    authResponse = await _regService.GenerateSessionAsync(request);
+                }
             }
 
             return StatusCode((int) authResponse.StatusCode, authResponse);
         }
+
+        private static bool HaveSameRegistrationInfo(RegistrationCacheData cacheData,
+            RegisterRequest<AuthenticationData> request2) =>
+            cacheData.Kind == request2.Kind &&
+            (cacheData.Request.UserName?.Equals(request2.UserName, StringComparison.OrdinalIgnoreCase) ?? true);
     }
 }

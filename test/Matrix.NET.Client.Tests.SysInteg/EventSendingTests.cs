@@ -26,7 +26,8 @@ namespace Matrix.NET.Client.Tests.SysInteg
         public async Task Should_Send_Text_Message()
         {
             MessageEventRequestBase req =
-                new TextMessageEventRequest(ConfigurationProvider.TestConfigurations.RoomId, Guid.NewGuid().ToString(), "Hello, World");
+                new TextMessageEventRequest(ConfigurationProvider.TestConfigurations.RoomId, Guid.NewGuid().ToString(),
+                    "Hello, World");
 
             string eventId = await Client.SendMessageEventAsync(req);
 
@@ -39,7 +40,8 @@ namespace Matrix.NET.Client.Tests.SysInteg
         [Trait(CommonConstants.ApiRouteTraitName, Constants.Routes.Events.TxnId)]
         public async Task Should_Send_Image_Message()
         {
-            string url = await Client.UploadMediaAsync(new MediaUploadRequest("img.png", "image/png", @"Files/matrix.png"));
+            string url =
+                await Client.UploadMediaAsync(new MediaUploadRequest("img.png", "image/png", @"Files/matrix.png"));
 
             MessageEventRequestBase req =
                 new ImageMessageEventRequest(ConfigurationProvider.TestConfigurations.RoomId, Guid.NewGuid().ToString())

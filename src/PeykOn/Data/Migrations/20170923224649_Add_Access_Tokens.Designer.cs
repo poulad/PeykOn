@@ -12,9 +12,10 @@ using System;
 namespace PeykOn.Data.Migrations
 {
     [DbContext(typeof(PeykOnDbContext))]
-    partial class PeykOnDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170923224649_Add_Access_Tokens")]
+    partial class Add_Access_Tokens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
