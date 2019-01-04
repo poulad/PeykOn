@@ -1,6 +1,6 @@
 # PeykOn - A Matrix HomeServer
 
-[![Build status](https://img.shields.io/appveyor/ci/pouladpld/PeykOn/master.svg?style=flat-square)](https://ci.appveyor.com/project/pouladpld/peykon)
+[![Build status](https://img.shields.io/appveyor/ci/poulad/PeykOn/master.svg?style=flat-square)](https://ci.appveyor.com/project/poulad/peykon)
 
 This repository contains:
 

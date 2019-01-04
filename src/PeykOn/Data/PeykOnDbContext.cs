@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Npgsql.NameTranslation;
 using PeykOn.Models;
 
 namespace PeykOn.Data
@@ -25,7 +26,8 @@ namespace PeykOn.Data
 
         private void SnakeCaseEntityNames(ModelBuilder modelBuilder)
         {
-            var mapper = new Npgsql.NpgsqlSnakeCaseNameTranslator();
+            
+            var mapper = new NpgsqlSnakeCaseNameTranslator();
 
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {

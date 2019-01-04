@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using PeykOn.Data;
 using System;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace PeykOn.Data.Migrations
 {
