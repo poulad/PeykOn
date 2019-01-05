@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 15.0.26124.0
@@ -15,6 +15,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Matrix.NET.Models", "src\Matrix.NET.Models\Matrix.NET.Models.csproj", "{B4095A12-7F55-4899-9117-94C629EBFC73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Matrix.NET.Abstractions", "src\Matrix.NET.Abstractions\Matrix.NET.Abstractions.csproj", "{40E491EC-F219-4E99-858F-5FADE97E2733}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PeykOn.Federation", "src\PeykOn.Federation\PeykOn.Federation.csproj", "{A5D54154-39BB-4F2D-95B6-5010B93DEB98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +88,18 @@ Global
 		{40E491EC-F219-4E99-858F-5FADE97E2733}.Release|x64.Build.0 = Release|Any CPU
 		{40E491EC-F219-4E99-858F-5FADE97E2733}.Release|x86.ActiveCfg = Release|Any CPU
 		{40E491EC-F219-4E99-858F-5FADE97E2733}.Release|x86.Build.0 = Release|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Debug|x64.Build.0 = Debug|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Debug|x86.Build.0 = Debug|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Release|x64.ActiveCfg = Release|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Release|x64.Build.0 = Release|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Release|x86.ActiveCfg = Release|Any CPU
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +110,7 @@ Global
 		{741C65AB-A6CE-4CD4-9267-14CD8AC8FB2B} = {C4129CB4-AA88-402A-844C-D89664C92878}
 		{B4095A12-7F55-4899-9117-94C629EBFC73} = {C4129CB4-AA88-402A-844C-D89664C92878}
 		{40E491EC-F219-4E99-858F-5FADE97E2733} = {C4129CB4-AA88-402A-844C-D89664C92878}
+		{A5D54154-39BB-4F2D-95B6-5010B93DEB98} = {C4129CB4-AA88-402A-844C-D89664C92878}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {352AC926-0E6D-4763-903B-3A128C33C77F}
