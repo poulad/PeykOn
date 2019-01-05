@@ -1,6 +1,7 @@
 # PeykOn - A Matrix HomeServer
 
-[![Build status](https://img.shields.io/appveyor/ci/poulad/PeykOn/master.svg?style=flat-square)](https://ci.appveyor.com/project/poulad/peykon)
+[![Travis Badge]](https://travis-ci.org/poulad/PeykOn)
+[![AppVeyor Badge]](https://ci.appveyor.com/project/Poulad/PeykOn)
 
 This repository contains:
 
@@ -29,3 +30,6 @@ This repository contains:
 #### PeykOn
 
 - [ ] Implement server-server API
+
+[Travis Badge]: https://img.shields.io/travis/Poulad/PeykOn/master.svg?style=popout-square&logo=travis
+[AppVeyor Badge]: https://img.shields.io/appveyor/ci/Poulad/PeykOn/master.svg?style=popout-square&logo=appveyor
