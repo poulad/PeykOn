@@ -3,6 +3,6 @@ configuration: Release
 before_build:
 - dotnet restore
 build:
-  project: Matrix.NET.sln
+  project: PeykOn.sln
   verbosity: normal
 test: off

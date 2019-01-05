@@ -1,0 +1,53 @@
+dist: trusty
+sudo: required
+language: node_js
+node_js:
+  - node
+branches:
+  except:
+  - gh-pages
+notifications:
+  email: false
+services:
+  - docker
+
+jobs:
+  include:
+    - stage: Build
+      name: "Build Docker Images"
+      install: cd scripts && npm ci && cd ..
+      script: node scripts/build
+      env:
+        # DEPLOY_SETTINGS_JSON='{"CI":[{"type":"docker","options":{"user":"","pass":""}}]}'
+        - secure: MXf/1zoXf/WnmxCHUQpJsHAKD4kwV16HN4Qm3HVQC5mu6BT0s5Q9G0b9JlX0Dzt84S/5FAp8eg26BlORdXcq0cye3NJu5kSlu9qDi3WQbRMMfzZnMCb8FNB00EKpFFfmpWeVwql9A0hcQZz3yHlEAYXsftv1gPMlxKlfsb2aMMxESwDKrOGnfpDe9yKwQ57c1UcMXKvDWw/O17OlN15Aug8LOtrQ6CXhvHmk2LqPYMKbo5hmqG6bmpoXkVV2PU9Zq+64vKxTJzbuMBNMMiL+VZasQF0avkxUSq9QXJmlPP1ZwaEHg2O6pgthYZD73JYdAFWW6qldOcqK2M6BN8LP6a8JxQl9HJ0sszGnyK/epovA0pZWA5qiXiRzZJgTTIt24nOe7B+Bj712IA2FpG3rf1n2/HmsjRtj1YUQp+cAMZtUJNOAqhlrQMkVASEDmof9dIwZ4SHxcH1rBsVIYP3zmknv0rLRldYT35wyABozzN9ykVEtx+Z3sCJeP0MNrJR7gqIk90CuUkxOxx3zIsAGxqBZSUUMSMMvAeQD+5PLDcNFeEgTli3kwukm9SAnHy7uQP9fmKfx+3GaRX2akA7t1d4Y3bP6uZkz8VemZ//GbZQHaRdtp2PEqnpEALCyvqq6wMY0PH4wdHDS/CD5IRoTwvo58uU8CyUCZxjNGICpU40=
+
+    - stage: Test
+      name: "Unit Tests"
+      # install:
+        # - cd scripts && npm ci && cd ..
+        # - docker pull poulad/peykon-federation:unstable-solution
+      env:
+        - image_tag=poulad/peykon-federation:unstable-solution
+      script: echo ToDo
+
+    - stage: Deploy
+      name: "Deploy"
+      script: skip
+      install:
+        - cd scripts && npm ci && cd ..
+        - docker pull poulad/peykon-federation:unstable
+      env:
+        # DEPLOY_SETTINGS_JSON='{"Production":[
+        #   {"type":"docker","options":{"source":"poulad/peykon-federation:unstable","target":"poulad/peykon-federation","user":"","pass":""}},
+        #   {"type":"heroku","options":{"app":"peykon","source":"poulad/peykon-federation","dyno":"web","user":"","token":""}}
+        # ]}'
+        - secure: am3x5RYWnMTDhyn92XdP5yUq7QRsh1lhlJQiXv+oYvOXfPOVCQBERJBTNksglcgblIznwOGrRECRk92DUMeMLyHxKwtXrz1aSJBJonumEqbVsJRdoFb8dxm7Dx9aX4WMSPltwJ/LAtlZFxfMOPypvQceJlq26YN4SUI82ODNLXZBoMoEusSt1qx00vNoIzQJN+YBixwmKM5WIGDSZ4BnNN+2YZt1A6B1QthXixwAGFplb/oMBaciLkwj9R5mo9LMEG2g3uGfWSCtBjIRFF+SbFznO4xRFyggCFo/Q1GqoaBZGMJVO9kLqG33HqvnLEdr+owHCoXIojltcyu+mybTNb8tXbENj0TqQHiIcFcLC2lZZuBQikq8gv3+d303Lt6/mH4wGH5LEfKOVHsyPjVumzxnk8yUAIlRDJDDOqn9p4nvBO4n3jjDUb2+w8Vgu4DYFLhhZTKCCurTWHyBnAHXBxmHTXPHsosfdvH6Mkxqqij5ChWlkQAMkTslfclMi1mDeRdN71FR3SLhFlmS/Mei/BF3CXqC7lHTyI8plSGaLdUweWzgPym1Oitvm08Mf4yfd1sGMUrnvE09icIB/5N9yb0jA3gxcOqrTVC/n746rlmApK5IflhL2NU8pr1sGv04Zmq/fL37W7UwBA4ukh38ParIYyMJccPM1p3dNyzF0ko=
+      deploy:
+        - provider: script
+          skip_cleanup: true
+          script: node scripts/deploy Production
+          on:
+            branch: ci
+
+
+# Disable "Build pushed pull requests"
