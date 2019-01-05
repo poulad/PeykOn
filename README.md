@@ -35,5 +35,5 @@ This repository contains:
 
 [Heroku Badge]: https://img.shields.io/badge/-demo-yellowgreen.svg?style=popout-square&logo=heroku&colorA=cccccc
 [AppVeyor Badge]: https://img.shields.io/appveyor/ci/Poulad/PeykOn/master.svg?style=popout-square&logo=appveyor
-[Travis Badge]: https://img.shields.io/travis/Poulad/PeykOn/master.svg?style=popout-square&logo=travis
+[Travis Badge]: https://img.shields.io/travis/poulad/PeykOn/master.svg?style=popout-square&logo=travis
 [Docker Hub Badge]: https://img.shields.io/docker/pulls/poulad/peykon-federation.svg?style=popout-square&logo=docker
