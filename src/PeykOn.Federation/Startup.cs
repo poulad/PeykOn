@@ -28,12 +28,10 @@ namespace PeykOn.Federation
             {
                 app.UseDeveloperExceptionPage();
             }
-//            else
-            {
-//                app.UseHsts();
-            }
 
+//            app.UseHsts();
 //            app.UseHttpsRedirection();
+
             app.UseDefaultFiles().UseStaticFiles();
             app.UseMvc();
         }

@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -10,56 +13,52 @@ namespace PeykOn.Federation.Controllers
     {
         [HttpGet]
         [HttpGet("{keyId}")]
-        public ActionResult Get(
+        public async Task<ActionResult> Get(
             string keyId = default
         )
         {
-//            var keys = new
-//            {
-//                server_name = "peykon.herokuapp.com",
-//                tls_fingerprints = new
-//                {
-//                    sha256 =
-//                        "MkY6MEU6NDg6MjQ6Rjg6QkE6MDU6M0U6NDI6NDA6Nzc6NzY6NTU6NjE6NTA6RjA6MkE6REE6NTg6RDI6MDU6RkI6MTY6OTA6Qjg6MUQ6QTY6NkQ6REQ6NzY6QzE6RTQ"
-//                },
-//                valid_until_ts = 1262667291, // Jan 2010
-//                verify_keys = new Dictionary<string, object>
-//                {
-//                    {"ed25519:foo", new {key = "n1sU1k3S+auzhXbEp4iQkUwToQE3YBx0k2CYVXjr5T4"}}
-//                },
-//            };
+            byte[] serverCertHash = await GetCertificateSha256HashAsync(Program.ServerName)
+                .ConfigureAwait(false);
 
-//            string unsignedJson = JsonConvert.SerializeObject(keys);
-//            string signedJson = MxCrypto.SignJson(keys);
-
-            var response = new
+            var keys = new
             {
-                server_name = "peykon.herokuapp.com",
-                signatures = new Dictionary<string, object>
+                server_name = Program.ServerName,
+                tls_fingerprints = new[]
                 {
+                    new
                     {
-                        "peykon.herokuapp.com", new Dictionary<string, object>
-                        {
-                            {
-                                "ed25519:foo",
-                                "U8k5mC/Q4O8iPoEyo7EHNXnmidePIOXqEIdztX+UpMNDdN5HDBGjGFjRlNYTbhuLWUIWlqzS5b6B4biaobBtAg"
-                            }
-                        }
+                        sha256 = MxCrypto.EncodeToUnpaddedBase64(serverCertHash)
                     }
-                },
-                tls_fingerprints = new
-                {
-                    sha256 =
-                        "MkY6MEU6NDg6MjQ6Rjg6QkE6MDU6M0U6NDI6NDA6Nzc6NzY6NTU6NjE6NTA6RjA6MkE6REE6NTg6RDI6MDU6RkI6MTY6OTA6Qjg6MUQ6QTY6NkQ6REQ6NzY6QzE6RTQ"
                 },
                 valid_until_ts = 1262667291, // Jan 2010
                 verify_keys = new Dictionary<string, object>
                 {
-                    {"ed25519:foo", new {key = "n1sU1k3S+auzhXbEp4iQkUwToQE3YBx0k2CYVXjr5T4"}}
+                    {"ed25519:foo", new {key = Program.PublicKeyUnpaddedBase64}}
                 },
             };
 
-            return Json(response, new JsonSerializerSettings {Formatting = Formatting.None});
+            var jObject = MxCrypto.GetSignedJson(keys);
+
+            return Json(jObject, new JsonSerializerSettings {Formatting = Formatting.None});
+        }
+
+        private static async Task<byte[]> GetCertificateSha256HashAsync(string server)
+        {
+            byte[] sha256CertificateHash = null;
+            var httpClientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (_, cert, __, ___) =>
+                {
+                    sha256CertificateHash = cert.GetCertHash(HashAlgorithmName.SHA256);
+                    return true;
+                }
+            };
+
+            var httpClient = new HttpClient(httpClientHandler);
+            var request = new HttpRequestMessage(HttpMethod.Head, $"https://{server}");
+            await httpClient.SendAsync(request).ConfigureAwait(false);
+
+            return sha256CertificateHash;
         }
     }
 }

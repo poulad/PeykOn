@@ -8,22 +8,24 @@ namespace PeykOn.Federation
 {
     public static class MxCrypto
     {
-        public static string SignJson(object obj, object unsigned = default)
+        public static JObject GetSignedJson(object obj, object unsigned = default)
         {
             var jObject = JObject.FromObject(obj);
             string signature = SignCanonicalJson(jObject);
             jObject.Add("signatures", JToken.FromObject(new Dictionary<string, object>
             {
-                {"peykon.herokuapp.com", new Dictionary<string, object> {{"ed25519:foo", signature}}}
+                {Program.ServerName, new Dictionary<string, object> {{"ed25519:foo", signature}}}
             }));
             if (unsigned != null)
             {
                 jObject.Add("unsigned", JToken.FromObject(unsigned));
             }
 
-            string json = jObject.ToString();
-            return json;
+            return jObject;
         }
+
+        public static string EncodeToUnpaddedBase64(byte[] data) =>
+            Convert.ToBase64String(data).TrimEnd('=');
 
         public static string GetAuthorizationHeaderValue(
             string method,
@@ -80,14 +82,13 @@ namespace PeykOn.Federation
             var algorithm = SignatureAlgorithm.Ed25519;
             using (var key = Key.Import(
                 algorithm,
-                Convert.FromBase64String("9QkYteyWXrXAOtUj9+iGTKjiV/m1WiaF19jVjOvOmNM="),
+                Convert.FromBase64String(Program.PrivateKeyBase64),
                 KeyBlobFormat.RawPrivateKey
             ))
             {
                 byte[] data = Encoding.UTF8.GetBytes(jObject.ToString());
                 byte[] signature = algorithm.Sign(key, data);
-                string unpaddedBase64Signature = Convert.ToBase64String(signature).TrimEnd('=');
-                return unpaddedBase64Signature;
+                return EncodeToUnpaddedBase64(signature);
             }
         }
 

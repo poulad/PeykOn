@@ -14,7 +14,7 @@ namespace PeykOn.Federation.Controllers
             {
                 server = new
                 {
-                    name = "peykon.herokuapp.com:443",
+                    name = "PeykOn",
                     version = "0.0.0-alpha1"
                 }
             };
