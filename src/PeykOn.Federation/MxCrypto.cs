@@ -27,18 +27,32 @@ namespace PeykOn.Federation
         public static string EncodeToUnpaddedBase64(byte[] data) =>
             Convert.ToBase64String(data).TrimEnd('=');
 
+        public static byte[] DecodeFromUnpaddedBase64(string encodedData)
+        {
+            string paddedBase64Data;
+            {
+                int paddingDiff = encodedData.Length % 4;
+                if (paddingDiff == 0)
+                    paddedBase64Data = encodedData;
+                else
+                    paddedBase64Data = encodedData.PadRight(encodedData.Length + 4 - paddingDiff, '=');
+            }
+            return Convert.FromBase64String(paddedBase64Data);
+        }
+
         public static string GetAuthorizationHeaderValue(
             string method,
+            string destination,
             string uri,
             object body = default
         )
         {
             var jObject = JObject.FromObject(new
             {
+                destination,
                 method,
+                origin = Program.ServerName,
                 uri,
-                origin = "peykon.herokuapp.com",
-                destination = "matrix.org"
             });
 
             if (body != null)
@@ -47,7 +61,7 @@ namespace PeykOn.Federation
             }
 
             string signature = SignCanonicalJson(jObject);
-            return $@"X-Matrix origin=peykon.herokuapp.com,key=""ed25519:foo"",sig=""{signature}""";
+            return $@"X-Matrix origin={Program.ServerName},key=""ed25519:foo"",sig=""{signature}""";
         }
 
         /* def authorization_headers(origin_name, origin_signing_key,
