@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using NSec.Cryptography;
@@ -11,14 +12,18 @@ namespace PeykOn.Federation
         public static JObject GetSignedJson(object obj, object unsigned = default)
         {
             var jObject = JObject.FromObject(obj);
+
             string signature = SignCanonicalJson(jObject);
-            jObject.Add("signatures", JToken.FromObject(new Dictionary<string, object>
+            var signatureField = new JProperty("signatures", JToken.FromObject(new Dictionary<string, object>
             {
                 {Program.ServerName, new Dictionary<string, object> {{"ed25519:foo", signature}}}
             }));
+
+            jObject.AddPropertyOrdered(signatureField);
+
             if (unsigned != null)
             {
-                jObject.Add("unsigned", JToken.FromObject(unsigned));
+                jObject.AddPropertyOrdered(new JProperty("unsigned", JToken.FromObject(unsigned)));
             }
 
             return jObject;
@@ -57,7 +62,7 @@ namespace PeykOn.Federation
 
             if (body != null)
             {
-                jObject.Add("content", JToken.FromObject(body));
+                jObject.AddPropertyOrdered(new JProperty("content", JToken.FromObject(body)));
             }
 
             string signature = SignCanonicalJson(jObject);
@@ -122,5 +127,24 @@ namespace PeykOn.Federation
         
             return json_object
          */
+
+        private static void AddPropertyOrdered(this JObject jObject, JProperty property)
+        {
+            if (string.Compare(property.Name, jObject.Properties().Last().Name, StringComparison.Ordinal) >= 0)
+            {
+                jObject.Add(property);
+            }
+            else
+            {
+                foreach (var field in jObject.Properties())
+                {
+                    if (string.Compare(property.Name, field.Name, StringComparison.Ordinal) < 0)
+                    {
+                        field.AddBeforeSelf(property);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

@@ -22,6 +22,7 @@ namespace PeykOn.Federation.Controllers
 
             var keys = new
             {
+                old_verify_keys = new { },
                 server_name = Program.ServerName,
                 tls_fingerprints = new[]
                 {
@@ -30,7 +31,7 @@ namespace PeykOn.Federation.Controllers
                         sha256 = MxCrypto.EncodeToUnpaddedBase64(serverCertHash)
                     }
                 },
-                valid_until_ts = 1262667291, // Jan 2010
+                valid_until_ts = 1746810709, // Friday, May 9, 2025 5:11:49 PM
                 verify_keys = new Dictionary<string, object>
                 {
                     {"ed25519:foo", new {key = Program.PublicKeyUnpaddedBase64}}
