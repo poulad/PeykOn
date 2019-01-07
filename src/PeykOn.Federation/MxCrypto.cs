@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NSec.Cryptography;
 
@@ -105,7 +106,8 @@ namespace PeykOn.Federation
                 KeyBlobFormat.RawPrivateKey
             ))
             {
-                byte[] data = Encoding.UTF8.GetBytes(jObject.ToString());
+                string json = jObject.ToString(Formatting.None);
+                byte[] data = Encoding.UTF8.GetBytes(json);
                 byte[] signature = algorithm.Sign(key, data);
                 return EncodeToUnpaddedBase64(signature);
             }
